@@ -26,8 +26,11 @@ jobs:
         run: cmake --build ${{github.workspace}}/build --config Release
 
       - name: Test
-        working_directory: ${{github.workspace}}/build
-        run: ctest -C Release
+        run: |
+          cd ${{github.workspace}}/build
+          ctest -C Release
 
       - name: Package
-        run: cpack --config ${{github.workspace}}/build/CPackConfig.cmake
+        run: |
+          cd ${{github.workspace}}/build
+          cpack --config CPackConfig.cmake
