@@ -8,7 +8,9 @@ on:
 
 jobs:
   build:
-    runs-on: debian:bullseye
+    runs-on: ubuntu-latest
+    container:
+      image: debian:bullseye
     permissions: write-all
     steps:
       - uses: actions/checkout@v3
