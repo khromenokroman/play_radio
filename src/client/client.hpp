@@ -10,9 +10,10 @@ namespace radio::client {
     class Client {
     public:
         Client(std::string const &ip_server, int port);
-
-        ~Client() = default;
         boost::asio::io_context io_context;
+        std::unique_ptr<boost::asio::ip::tcp::socket> socket;
+        ~Client() = default;
+
     };
 }
 

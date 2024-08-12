@@ -25,7 +25,6 @@ radio::server::Server::~Server() {
 
 void radio::server::Server::start_accepting() {
     std::shared_ptr<boost::asio::ip::tcp::socket> socket = std::make_shared<boost::asio::ip::tcp::socket>(m_io_context);
-//    boost::asio::streambuf buffer;
     auto callback = [&](boost::system::error_code const &error) {
         accept_handler(error, socket, m_buffer);
     };
