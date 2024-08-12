@@ -9,5 +9,6 @@ set(PLUG_SOURCES
         main.cpp
 )
 add_executable(${APP_NAME} ${PLUG_SOURCES})
+install(TARGETS ${APP_NAME} DESTINATION bin)
 
 target_link_libraries(${APP_NAME} fmt::fmt)
