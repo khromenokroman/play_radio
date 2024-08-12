@@ -15,7 +15,7 @@ jobs:
         with:
           submodules: true
       - run: sudo apt-get update && sudo apt-get install cmake libboost-dev libfmt-dev libgtest-dev libgmock-dev -y
-      - run: cmake .
+      - run: cmake . -DPATCH_VERSION=${{ github.run_number }}
       - run: cmake --build .
       - run: cmake --build . --target package
       - name: Create deb packet
@@ -24,8 +24,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: 0.0.1
-          release_name: Release 0.0.1
+          tag_name: ${{ github.run_number }}
+          release_name: Release ${{ github.run_number }}
           draft: false
           prerelease: false
       - name: Upload Release Asset
@@ -35,6 +35,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./play_radio-0.0.1-Linux.deb
-          asset_name: play_radio-0.0.1-Linux.deb
+          asset_path: ./play_radio-0.0.${{ github.run_number }}-Linux.deb
+          asset_name: play_radio-0.0.${{ github.run_number }}-Linux.deb
           asset_content_type: application/vnd.debian.binary-package
