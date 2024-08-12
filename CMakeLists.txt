@@ -26,7 +26,7 @@ add_subdirectory(src)
 add_subdirectory(tests)
 
 set(CPACK_GENERATOR DEB)
-set(CPACK_DEBIAN_PACKAGE_DEPENDS "libboost1.58.0 (>= 1.58)")
+#set(CPACK_DEBIAN_PACKAGE_DEPENDS "libboost1.58.0 (>= 1.58)")
 set(CPACK_PACKAGE_VENDOR "Khromenok Roman")
 set(CPACK_PACKAGE_DESCRIPTION "Запускает радио удаленно")
 set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
