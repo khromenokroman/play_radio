@@ -1,36 +1,41 @@
-name: CMake
+name: 'C++ CI'
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches:
+      - master
+      - test
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    permissions: write-all
     steps:
-      - uses: actions/checkout@v2
-
-      - name: install dependencies
-        run: sudo apt-get install -y libboost1.65-dev
-
-      - name: Create Build Environment
-        run: cmake -E make_directory ${{github.workspace}}/build
-
-      - name: Configure CMake
-        run: cmake $GITHUB_WORKSPACE -B ${{github.workspace}}/build
-
-      - name: Build
-        run: cmake --build ${{github.workspace}}/build --config Release
-
-      - name: Test
-        run: |
-          cd ${{github.workspace}}/build
-          ctest -C Release
-
-      - name: Package
-        run: |
-          cd ${{github.workspace}}/build
-          cpack --config CPackConfig.cmake
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+      - run: sudo apt-get update && sudo apt-get install cmake libboost-dev -y
+      - run: cmake .
+      - run: cmake --build .
+      - run: cmake --build . --target package
+      - name: Create deb packet
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: 0.0.1
+          release_name: Release 0.0.1
+          draft: false
+          prerelease: false
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./play_radio-0.0.1-Linux.deb
+          asset_name: play_radio-0.0.1-Linux.deb
+          asset_content_type: application/vnd.debian.binary-package
