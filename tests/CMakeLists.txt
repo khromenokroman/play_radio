@@ -3,7 +3,7 @@ find_package(GTest REQUIRED)
 include(GoogleTest)
 
 set(TEST play_radio_test)
-find_package(fmt CONFIG REQUIRED)
+find_package(fmt)
 
 add_compile_options(
         -Wall
@@ -35,7 +35,7 @@ target_include_directories(${TEST} PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/../src
         ${DBUS_INCLUDE_DIRS})
 
-target_link_libraries(${TEST} PRIVATE GTest::gtest_main gcov fmt::fmt-header-only)
+target_link_libraries(${TEST} PRIVATE GTest::gtest_main gcov fmt::fmt)
 
 gtest_discover_tests(${TEST})
 
