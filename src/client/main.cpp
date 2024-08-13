@@ -3,7 +3,6 @@
 #include "client.hpp"
 
 
-
 /**
  * @brief Helper function to check if the program is running as root.
  *
@@ -20,18 +19,21 @@ void check_if_not_root();
  * @return The IP address string.
 */
 std::string server_selection();
+
 /**
  * @brief Function to select the port for the server.
  * If no valid port is entered, the default port is returned.
  * @return The port number.
 */
 uint32_t port_selection();
+
 /**
  * @brief Trim leading and trailing whitespace from a string in C++.
  * @param s The string to be trimmed.
  * @return The trimmed string.
 */
 std::string trim(std::string const &s);
+
 /**
  * @brief Function to validate an IP address
  * @param ip The string containing the IP address.
@@ -59,7 +61,7 @@ std::string server_selection() {
     std::string ip_server{};
     ::fmt::print("\033[2J\033[H");
     do {
-        ::fmt::print("Введите адрес сервера [192.168.0.98]: ");
+        ::fmt::print("Введите адрес сервера [{}]: ", SERVER);
         std::getline(std::cin, ip_server);
         ip_server = trim(ip_server);
         if (!isValidIP(ip_server) && !ip_server.empty()) {
@@ -76,7 +78,7 @@ uint32_t port_selection() {
     std::string port_str;
     uint32_t port = 0;
     ::fmt::print("\033[2J\033[H");
-    ::fmt::print("Введите порт сервера [1993]: ");
+    ::fmt::print("Введите порт сервера [{}]: ",PORT);
     std::getline(std::cin, port_str);
     port_str = trim(port_str);
     if (port_str.empty()) {
