@@ -11,10 +11,9 @@ namespace radio::server {
     public:
         explicit Server(int port);
 
-        void
-        accept_handler(const boost::system::error_code &error,
-                       const std::shared_ptr<boost::asio::ip::tcp::socket> &socket,
-                       boost::asio::streambuf &buffer);
+        void accept_handler(const boost::system::error_code &error,
+                            const std::shared_ptr<boost::asio::ip::tcp::socket> &socket,
+                            boost::asio::streambuf &buffer);
 
         void stop();
 
@@ -22,16 +21,17 @@ namespace radio::server {
 
         void start_accepting();
 
-        ~Server();
+        ~Server() = default;
 
-        ssize_t m_total_message = 0;
+        [[nodiscard]]ssize_t get_count_message() const;
+
     private:
-
-        boost::asio::streambuf m_buffer;
+        boost::asio::streambuf m_buffer; // 96
         boost::asio::io_context m_io_context{}; // 16
         std::unique_ptr<boost::asio::ip::tcp::acceptor> m_acceptor; // 8
         std::thread m_asio_thread; // 8
-        boost::asio::signal_set m_signals;
+        std::unique_ptr<boost::asio::signal_set> m_signals; // 8
+        ssize_t m_total_message = 0; // 8
     };
 }
 
