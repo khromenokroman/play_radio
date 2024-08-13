@@ -1,3 +1,4 @@
+#include <random>
 #include "client.hpp"
 
 radio::client::Client::Client(const std::string &ip_server, uint32_t port, std::filesystem::path const &path) : socket(
@@ -25,19 +26,18 @@ radio::client::Client::Client(const std::string &ip_server, uint32_t port, std::
     ::fmt::print("Connected to {}:{} successful\n", ip_server, port);
 }
 
-void radio::client::Client::send_message(std::string_view const &message) const {
+void radio::client::Client::send_message() {
+    get_random_line(LIST_RADIO);
     boost::system::error_code ec;
-    if (message.empty()) {
+
+    if (full_command.empty()) {
         throw std::runtime_error("Message is empty!");
     }
-    std::string correct_message;
-    if (message[message.size()] != '\n') {
-        (correct_message += message) += '\n';
-    } else {
-        correct_message = message;
+    if (full_command[full_command.size()] != '\n') {
+        throw std::runtime_error(::fmt::format("In message {} last symbol is not '\\n'", full_command));
     }
 
-    boost::asio::write(*socket, boost::asio::buffer(correct_message), ec);
+    boost::asio::write(*socket, boost::asio::buffer(full_command), ec);
     if (ec) {
         throw std::runtime_error(::fmt::format("Failed to send message. Error: {}", ec.message()));
     }
@@ -46,4 +46,32 @@ void radio::client::Client::send_message(std::string_view const &message) const 
     if (ec) {
         throw std::runtime_error(::fmt::format("Failed to shutdown socket. Error: {}", ec.message()));
     }
+}
+
+void radio::client::Client::get_random_line(std::string const &filename) {
+    std::ifstream file(filename);
+
+    if (!file.is_open()) {
+        throw std::runtime_error(::fmt::format("Can't open file {}", LIST_RADIO));
+    }
+
+    std::vector<std::string> lines;
+    lines.reserve(20);
+    std::string line;
+
+    while (std::getline(file, line)) {
+        lines.push_back(line);
+    }
+    file.close();
+
+    if (!lines.empty()) {
+        std::random_device rd;
+        std::mt19937 g(rd());
+        std::shuffle(lines.begin(), lines.end(), g);
+
+        full_command += lines[0];
+        full_command += '\n';
+    }
+
+    throw std::runtime_error(::fmt::format("File {} is empty", LIST_RADIO));
 }

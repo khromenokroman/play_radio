@@ -2,9 +2,7 @@
 #include <algorithm>
 #include "client.hpp"
 
-#define SERVER "192.168.0.98"
-#define LIST_RADIO "/etc/radio/radio_list"
-#define PORT 1993
+
 
 /**
  * @brief Helper function to check if the program is running as root.
@@ -16,12 +14,29 @@
  */
 void check_if_not_root();
 
+/**
+ * @brief Function to select the server IP address.
+ * If no valid IP-address is entered, the default IP-address is returned.
+ * @return The IP address string.
+*/
 std::string server_selection();
-
+/**
+ * @brief Function to select the port for the server.
+ * If no valid port is entered, the default port is returned.
+ * @return The port number.
+*/
 uint32_t port_selection();
-
+/**
+ * @brief Trim leading and trailing whitespace from a string in C++.
+ * @param s The string to be trimmed.
+ * @return The trimmed string.
+*/
 std::string trim(std::string const &s);
-
+/**
+ * @brief Function to validate an IP address
+ * @param ip The string containing the IP address.
+ * @return True if IP is valid, false otherwise
+*/
 bool isValidIP(std::string ip);
 
 int main() {
@@ -32,8 +47,7 @@ int main() {
         ::fmt::print("Server: {}\nPort: {}", ip_srv, port);
         check_if_not_root();
         radio::client::Client client(ip_srv, port, LIST_RADIO);
-//        client.send_message("cvlc http://kpradio.hostingradio.ru:8000/kaliningrad.radiokp128.mp3");
-//        client.send_message("ls -l");
+        client.send_message();
     } catch (std::exception const &ex) {
         ::fmt::print(stderr, "Exception occurred: {}\n", ex.what());
         return -1;
