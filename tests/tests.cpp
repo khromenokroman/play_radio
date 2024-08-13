@@ -23,9 +23,7 @@ TEST(Server, create_sigint) {
     std::this_thread::sleep_for(std::chrono::seconds(5));
 
     int ret = pthread_kill(th1.native_handle(), SIGINT);
-    if (ret != 0) {
-        ::fmt::print("Err: {}\n", strerror(errno));
-    }
+    ASSERT_EQ(ret,0) << ::fmt::format("Err: {}\n", strerror(errno));
     th1.join();
 }
 
@@ -45,9 +43,7 @@ TEST(Server, create_sigterm) {
     std::this_thread::sleep_for(std::chrono::seconds(5));
 
     int ret = pthread_kill(th1.native_handle(), SIGTERM);
-    if (ret != 0) {
-        ::fmt::print("Err: {}\n", strerror(errno));
-    }
+    ASSERT_EQ(ret,0) << ::fmt::format("Err: {}\n", strerror(errno));
     th1.join();
 }
 
@@ -88,9 +84,7 @@ TEST(Server, connect) {
     }
 
     int ret = pthread_kill(th1.native_handle(), SIGTERM);
-    if (ret != 0) {
-        ::fmt::print("Err: {}\n", strerror(errno));
-    }
+    ASSERT_EQ(ret,0) << ::fmt::format("Err: {}\n", strerror(errno));
     th1.join();
 }
 
