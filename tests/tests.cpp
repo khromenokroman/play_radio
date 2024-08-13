@@ -102,7 +102,7 @@ TEST(Server, recive_message) {
     boost::asio::connect(socket, endpoints, ec);
     ASSERT_FALSE(ec) << ::fmt::format("Failed to connect to {}:{}, Error: {}\n", SERVER, PORT, ec.message());
 
-    std::string message1 = "Test Message1\n";
+    std::string message1 = "ls -lh\n";
     boost::asio::write(socket, boost::asio::buffer(message1));
     std::this_thread::sleep_for(std::chrono::seconds(4));
     ::fmt::print("get_count_message: {}\n", server->get_count_message());
