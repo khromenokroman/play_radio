@@ -54,6 +54,10 @@ void radio::server::Server::run() {
 }
 
 void radio::server::Server::stop() {
+    if (m_child_process && m_child_process.running()) {
+        m_child_process.terminate();
+        m_child_process.wait();
+    }
     m_io_context.stop();
     std::this_thread::sleep_for(std::chrono::seconds(1));
 }
