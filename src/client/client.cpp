@@ -33,7 +33,7 @@ void radio::client::Client::send_message() {
     if (full_command.empty()) {
         throw std::runtime_error("Message is empty!");
     }
-    if (full_command[full_command.size()] != '\n') {
+    if (full_command.back() != '\n') {
         throw std::runtime_error(::fmt::format("In message {} last symbol is not '\\n'", full_command));
     }
 
@@ -71,7 +71,7 @@ void radio::client::Client::get_random_line(std::string const &filename) {
 
         full_command += lines[0];
         full_command += '\n';
+    }else{
+        throw std::runtime_error(::fmt::format("File {} is empty", LIST_RADIO));
     }
-
-    throw std::runtime_error(::fmt::format("File {} is empty", LIST_RADIO));
 }
