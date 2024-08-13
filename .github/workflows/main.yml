@@ -30,7 +30,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.run_number }}
-          release_name: play-radio_-DPATCH_VERSION=${{ github.run_number }}
+          release_name: play-radio_0.0.${{ github.run_number }}
           draft: false
           prerelease: false
       - name: Upload Release Asset
