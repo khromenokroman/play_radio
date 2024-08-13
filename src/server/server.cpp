@@ -69,6 +69,14 @@ void radio::server::Server::accept_handler(const boost::system::error_code &erro
                 std::string message;
                 std::getline(is, message);
                 ::fmt::print("Received from client: {}\n", message);
+                if (m_child_process && m_child_process.running()) {
+                    m_child_process.terminate();
+                    m_child_process.wait();
+                }
+                auto future = std::async(std::launch::async, [this, message]() {
+                    m_child_process = boost::process::child(message, boost::process::std_out > boost::process::null);
+                    m_child_process.detach();
+                });
                 m_total_message++;
             } else {
                 if (error == boost::asio::error::eof) {
