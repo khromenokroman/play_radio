@@ -4,11 +4,11 @@
 #include "../src/client/client.hpp"
 #include "../src/server/server.hpp"
 
-#define PORT 1993
-#define SERVER "127.0.0.1"
+#define PORT_TMP 1993
+#define SERVER_TMP "127.0.0.1"
 
 TEST(Server, create_sigint) {
-    auto server = std::make_shared<radio::server::Server>(PORT);
+    auto server = std::make_shared<radio::server::Server>(PORT_TMP);
 
     std::promise<void> started;
     auto started_fut = started.get_future();
@@ -27,7 +27,7 @@ TEST(Server, create_sigint) {
 }
 
 TEST(Server, create_sigterm) {
-    auto server = std::make_shared<radio::server::Server>(PORT);
+    auto server = std::make_shared<radio::server::Server>(PORT_TMP);
 
     std::promise<void> started;
     auto started_fut = started.get_future();
@@ -46,7 +46,7 @@ TEST(Server, create_sigterm) {
 }
 
 TEST(Server, connect) {
-    auto server = std::make_shared<radio::server::Server>(PORT);
+    auto server = std::make_shared<radio::server::Server>(PORT_TMP);
 
     std::promise<void> started;
     auto started_fut = started.get_future();
@@ -63,11 +63,11 @@ TEST(Server, connect) {
     boost::asio::ip::tcp::resolver resolver(io_context);
     boost::system::error_code ec;
 
-    boost::asio::ip::tcp::resolver::results_type endpoints = resolver.resolve(SERVER, std::to_string(PORT), ec);
-    ASSERT_FALSE(ec) << ::fmt::format("Failed to resolve {}:{} - Error: {}\n", SERVER, PORT, ec.message());
+    boost::asio::ip::tcp::resolver::results_type endpoints = resolver.resolve(SERVER_TMP, std::to_string(PORT_TMP), ec);
+    ASSERT_FALSE(ec) << ::fmt::format("Failed to resolve {}:{} - Error: {}\n", SERVER_TMP, PORT_TMP, ec.message());
     boost::asio::ip::tcp::socket socket(io_context);
     boost::asio::connect(socket, endpoints, ec);
-    ASSERT_FALSE(ec) << ::fmt::format("Failed to connect to {}:{}, Error: {}\n", SERVER, PORT, ec.message());
+    ASSERT_FALSE(ec) << ::fmt::format("Failed to connect to {}:{}, Error: {}\n", SERVER_TMP, PORT_TMP, ec.message());
 
     ASSERT_FALSE(ec) << "Error occurred when trying to connect: " << ec.message();
     socket.shutdown(boost::asio::ip::tcp::socket::shutdown_send, ec);
@@ -79,7 +79,7 @@ TEST(Server, connect) {
 }
 
 TEST(Server, recive_message) {
-    auto server = std::make_shared<radio::server::Server>(PORT);
+    auto server = std::make_shared<radio::server::Server>(PORT_TMP);
 
     std::promise<void> started;
     auto started_fut = started.get_future();
@@ -96,11 +96,11 @@ TEST(Server, recive_message) {
     boost::asio::ip::tcp::resolver resolver(io_context);
     boost::system::error_code ec;
 
-    boost::asio::ip::tcp::resolver::results_type endpoints = resolver.resolve(SERVER, std::to_string(PORT), ec);
-    ASSERT_FALSE(ec) << ::fmt::format("Failed to resolve {}:{} - Error: {}\n", SERVER, PORT, ec.message());
+    boost::asio::ip::tcp::resolver::results_type endpoints = resolver.resolve(SERVER_TMP, std::to_string(PORT_TMP), ec);
+    ASSERT_FALSE(ec) << ::fmt::format("Failed to resolve {}:{} - Error: {}\n", SERVER_TMP, PORT_TMP, ec.message());
     boost::asio::ip::tcp::socket socket(io_context);
     boost::asio::connect(socket, endpoints, ec);
-    ASSERT_FALSE(ec) << ::fmt::format("Failed to connect to {}:{}, Error: {}\n", SERVER, PORT, ec.message());
+    ASSERT_FALSE(ec) << ::fmt::format("Failed to connect to {}:{}, Error: {}\n", SERVER_TMP, PORT_TMP, ec.message());
 
     std::string message1 = "ls -lh\n";
     boost::asio::write(socket, boost::asio::buffer(message1));
