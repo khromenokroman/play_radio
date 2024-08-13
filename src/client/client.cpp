@@ -1,7 +1,13 @@
 #include "client.hpp"
 
-radio::client::Client::Client(const std::string &ip_server, int port) : socket(
+radio::client::Client::Client(const std::string &ip_server, uint32_t port, std::filesystem::path const &path) : socket(
         std::make_unique<boost::asio::ip::tcp::socket>(io_context)) {
+
+    std::ifstream list_radio_ref(path);
+    if (!list_radio_ref.is_open()) {
+        throw std::runtime_error(::fmt::format("Can't open file {}", path.string()));
+    }
+
     boost::asio::ip::tcp::resolver resolver(io_context);
     boost::system::error_code ec;
 
