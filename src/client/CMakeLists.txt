@@ -1,7 +1,6 @@
 set(APP_NAME radio_client)
 message(STATUS "Добавлен в сборку ${APP_NAME}")
 
-find_package(PkgConfig REQUIRED)
 find_package(Threads REQUIRED)
 find_package(fmt)
 
