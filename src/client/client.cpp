@@ -71,7 +71,7 @@ void radio::client::Client::get_random_line(std::string const &filename) {
 
         full_command += lines[0];
         full_command += '\n';
-    }else{
+    } else {
         throw std::runtime_error(::fmt::format("File {} is empty", LIST_RADIO));
     }
 }

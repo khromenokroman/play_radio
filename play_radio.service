@@ -1,0 +1,13 @@
+[Unit]
+Description=Radio Server Service
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/radio_server 1993
+User=raipo
+Restart=on-failure
+RestartSec=3
+LimitNOFILE=1000
+
+[Install]
+WantedBy=multi-user.target
