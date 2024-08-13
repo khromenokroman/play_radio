@@ -44,7 +44,7 @@ int main() {
         std::string ip_srv = server_selection();
         uint32_t port = port_selection();
 
-        ::fmt::print("Server: {}\nPort: {}", ip_srv, port);
+        ::fmt::print("Server: {}\nPort: {}\n", ip_srv, port);
         check_if_not_root();
         radio::client::Client client(ip_srv, port, LIST_RADIO);
         client.send_message();
