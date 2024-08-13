@@ -2,12 +2,13 @@
 
 radio::server::Server::Server(int port) : m_acceptor(
         std::make_unique<boost::asio::ip::tcp::acceptor>(m_io_context, boost::asio::ip::tcp::endpoint(
-                boost::asio::ip::tcp::v4(), port))), m_signals(m_io_context, SIGINT, SIGTERM) {
+                boost::asio::ip::tcp::v4(), port))), m_signals(
+        std::make_unique<boost::asio::signal_set>(m_io_context, SIGINT, SIGTERM)) {
 
     ::fmt::print("Server started in port {}\n", port);
 
 
-    m_signals.async_wait(
+    m_signals->async_wait(
             [this](boost::system::error_code ec, int signal_number) {
                 if (!ec) {
                     switch (signal_number) {
@@ -36,11 +37,6 @@ radio::server::Server::Server(int port) : m_acceptor(
 
     start_accepting();
 
-}
-
-radio::server::Server::~Server() {
-//    m_io_context.stop();
-//    std::this_thread::sleep_for(std::chrono::seconds(1));
 }
 
 void radio::server::Server::start_accepting() {
@@ -73,6 +69,7 @@ void radio::server::Server::accept_handler(const boost::system::error_code &erro
                 std::string message;
                 std::getline(is, message);
                 ::fmt::print("Received from client: {}\n", message);
+                m_total_message++;
             } else {
                 if (error == boost::asio::error::eof) {
                     ::fmt::print(stderr, "Connection closed by client\n");
@@ -80,7 +77,6 @@ void radio::server::Server::accept_handler(const boost::system::error_code &erro
                     ::fmt::print(stderr, "Error occurred while receiving message: {}\n", error.message());
                 }
             }
-            ::fmt::print("socket use {}\n", socket.use_count());
             buffer.consume(bytes_transferred);
             start_accepting();
         };
@@ -88,4 +84,8 @@ void radio::server::Server::accept_handler(const boost::system::error_code &erro
     } else {
         ::fmt::print(stderr, "Error occurred while accepting a new connection: {}\n", error.message());
     }
+}
+
+ssize_t radio::server::Server::get_count_message() const {
+    return m_total_message;
 }
