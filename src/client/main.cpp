@@ -39,7 +39,7 @@ std::string trim(std::string const &s);
  * @param ip The string containing the IP address.
  * @return True if IP is valid, false otherwise
 */
-bool isValidIP(std::string ip);
+bool is_valid_ip(std::string ip);
 
 int main() {
     try {
@@ -64,10 +64,10 @@ std::string server_selection() {
         ::fmt::print("Введите адрес сервера [{}]: ", SERVER);
         std::getline(std::cin, ip_server);
         ip_server = trim(ip_server);
-        if (!isValidIP(ip_server) && !ip_server.empty()) {
+        if (!is_valid_ip(ip_server) && !ip_server.empty()) {
             return SERVER;
         }
-    } while (!isValidIP(ip_server) && !ip_server.empty());
+    } while (!is_valid_ip(ip_server) && !ip_server.empty());
     if (ip_server.empty()) {
         return SERVER;
     }
@@ -114,8 +114,8 @@ std::string trim(const std::string &s) {
     return std::string(start, end + 1);
 }
 
-bool isValidIP(std::string ip) {
-    int partsCount = 0;
+bool is_valid_ip(std::string ip) {
+    int parts_count = 0;
     std::string part;
     ip.push_back('.');
     for (char c: ip) {
@@ -123,7 +123,7 @@ bool isValidIP(std::string ip) {
             if (part.empty() || stoi(part) > 255 || stoi(part) < 0) {
                 return false;
             }
-            partsCount++;
+            parts_count++;
             part.clear();
         } else if (!isdigit(c)) {
             return false;
@@ -131,5 +131,5 @@ bool isValidIP(std::string ip) {
             part.push_back(c);
         }
     }
-    return partsCount == 4;
+    return parts_count == 4;
 }
