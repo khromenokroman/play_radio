@@ -8,9 +8,10 @@
 #include <fstream>
 
 /* default values */
-#define SERVER "192.168.0.98"
+#define SERVER "192.168.25.32"
 #define LIST_RADIO "/etc/radio/radio_list"
 #define PORT 1993
+#define BUFFER_RADIO_LIST 20
 
 namespace radio::client {
     class Client {
@@ -42,9 +43,9 @@ namespace radio::client {
          */
         void get_random_line(std::string const &filename);
 
-        std::string full_command = "cvlc ";
-        boost::asio::io_context io_context;
-        std::unique_ptr<boost::asio::ip::tcp::socket> socket;
+        std::string full_command = "cvlc "; // 32
+        boost::asio::io_context io_context; // 16
+        std::unique_ptr<boost::asio::ip::tcp::socket> socket; // 8
     };
 }
 

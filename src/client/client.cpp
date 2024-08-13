@@ -56,7 +56,7 @@ void radio::client::Client::get_random_line(std::string const &filename) {
     }
 
     std::vector<std::string> lines;
-    lines.reserve(20);
+    lines.reserve(BUFFER_RADIO_LIST);
     std::string line;
 
     while (std::getline(file, line)) {
