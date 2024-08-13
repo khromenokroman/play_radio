@@ -15,12 +15,17 @@ int main(int argc, char **argv) {
         ::fmt::print(stderr, "Can't found port server\nUsage: {} <port_number>\n", argv[0]);
         return 1;
     }
-
-    check_if_not_root();
-
     int port = std::stoi(argv[1]);
-    radio::server::Server server(port);
-    server.run();
+
+    try {
+        check_if_not_root();
+
+        radio::server::Server server(port);
+        server.run();
+    }catch (std::exception const& ex){
+        ::fmt::print(stderr, "Exception occurred: {}\n", ex.what());
+        return -1;
+    }
     return 0;
 }
 
