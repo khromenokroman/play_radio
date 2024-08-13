@@ -7,12 +7,6 @@
 #include <filesystem>
 #include <fstream>
 
-/* default values */
-#define SERVER "192.168.25.32"
-#define LIST_RADIO "/etc/radio/radio_list"
-#define PORT 1993
-#define BUFFER_RADIO_LIST 20
-
 namespace radio::client {
     class Client {
     public:
@@ -46,6 +40,12 @@ namespace radio::client {
         std::string full_command = "cvlc "; // 32
         boost::asio::io_context io_context; // 16
         std::unique_ptr<boost::asio::ip::tcp::socket> socket; // 8
+    public:
+        /* default values, temp decision */
+        static constexpr char const *SERVER = "192.168.25.32";
+        static constexpr char const* LIST_RADIO  = "/etc/radio/radio_list";
+        static constexpr uint64_t BUFFER_RADIO_LIST = 20;
+        static constexpr uint32_t PORT = 1993;
     };
 }
 

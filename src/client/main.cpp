@@ -48,7 +48,7 @@ int main() {
 
         /*::fmt::print("Server: {}\nPort: {}\n", ip_srv, port);*/
         check_if_not_root();
-        radio::client::Client client(ip_srv, port, LIST_RADIO);
+        radio::client::Client client(ip_srv, port, radio::client::Client::LIST_RADIO);
         client.send_message();
     } catch (std::exception const &ex) {
         ::fmt::print(stderr, "Exception occurred: {}\n", ex.what());
@@ -61,15 +61,15 @@ std::string server_selection() {
     std::string ip_server{};
     ::fmt::print("\033[2J\033[H");
     do {
-        ::fmt::print("Введите адрес сервера [{}]: ", SERVER);
+        ::fmt::print("Введите адрес сервера [{}]: ", radio::client::Client::SERVER);
         std::getline(std::cin, ip_server);
         ip_server = trim(ip_server);
         if (!is_valid_ip(ip_server) && !ip_server.empty()) {
-            return SERVER;
+            return radio::client::Client::SERVER;
         }
     } while (!is_valid_ip(ip_server) && !ip_server.empty());
     if (ip_server.empty()) {
-        return SERVER;
+        return radio::client::Client::SERVER;
     }
     return ip_server;
 }
@@ -78,18 +78,18 @@ uint32_t port_selection() {
     std::string port_str;
     uint32_t port = 0;
     ::fmt::print("\033[2J\033[H");
-    ::fmt::print("Введите порт сервера [{}]: ",PORT);
+    ::fmt::print("Введите порт сервера [{}]: ",radio::client::Client::PORT);
     std::getline(std::cin, port_str);
     port_str = trim(port_str);
     if (port_str.empty()) {
-        return PORT;
+        return radio::client::Client::PORT;
     }
     try {
         port = std::stoul(port_str);
     } catch (std::invalid_argument &e) {
-        return PORT;
+        return radio::client::Client::PORT;
     } catch (std::out_of_range &e) {
-        return PORT;
+        return radio::client::Client::PORT;
     }
     return port;
 }
