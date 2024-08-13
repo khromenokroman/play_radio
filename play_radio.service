@@ -3,6 +3,7 @@ Description=Radio Server Service
 After=network.target
 
 [Service]
+PAMName=login
 ExecStart=/usr/bin/radio_server 1993
 User=raipo
 Restart=on-failure
