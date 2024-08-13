@@ -1,4 +1,4 @@
-name: 'C++ CI'
+name: 'CI play radio'
 
 on:
   push:
@@ -17,6 +17,8 @@ jobs:
       - run: sudo apt-get update && sudo apt-get install cmake libboost-all-dev libfmt-dev libgtest-dev libgmock-dev -y
       - run: cmake . -DPATCH_VERSION=${{ github.run_number }}
       - run: cmake --build .
+      - name: Run tests
+        run: ./play_radio_test
       - run: cmake --build . --target package
       - name: Create deb packet
         id: create_release
