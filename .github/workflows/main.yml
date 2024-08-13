@@ -15,12 +15,14 @@ jobs:
         with:
           submodules: true
       - run: sudo apt-get update && sudo apt-get install cmake libboost-all-dev libfmt-dev libgtest-dev libgmock-dev -y
-      - run: mkdir -p ./build && cd ./build
-      - run: cmake .. -DPATCH_VERSION=${{ github.run_number }}
-      - run: cmake --build .
-      - name: Run tests
-        run: ./tests/play_radio_test
-      - run: cmake --build . --target package
+      - name: Build, Test, and Package
+        run: |
+          mkdir -p build
+          cd build
+          cmake .. -DPATCH_VERSION=${{ github.run_number }}
+          cmake --build .
+          ./tests/play_radio_test
+          cmake --build . --target package
       - name: Create deb packet
         id: create_release
         uses: actions/create-release@v1
@@ -38,6 +40,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./play_radio-0.0.${{ github.run_number }}-Linux.deb
+          asset_path: ./build/play_radio-0.0.${{ github.run_number }}-Linux.deb
           asset_name: play_radio-0.0.${{ github.run_number }}-Linux.deb
           asset_content_type: application/vnd.debian.binary-package
